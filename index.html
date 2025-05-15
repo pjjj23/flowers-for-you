@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Flower Bouquet Animation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #fff5f8;
+            --accent-color: #ffb6c1;
+            --text-color: #4a4a4a;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --glow-color: rgba(255, 255, 255, 0.8);
+            --transition-time: 0.5s;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #ffe4e8 50%, #ffd1dc 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+            overflow: hidden;
+        }
+
+        /* Soft particles background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--glow-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float-particle ease-in-out infinite;
+        }
+
+        /* Main content container */
+        .content-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            max-width: 90%;
+            transform-style: preserve-3d;
+        }
+
+        /* Bouquet container with enhanced animation */
+        .bouquet-container {
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 8s ease-in-out infinite;
+            z-index: 10;
+            transition: transform 0.5s ease;
+            transform: translateY(0) scale(1);
+            will-change: transform;
+        }
+
+        .bouquet-container:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0.5deg);
+            }
+            25% {
+                transform: translateY(-10px) rotate(-0.5deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-8px) rotate(0.8deg);
+            }
+        }
+
+        /* Enhanced bouquet image with subtle hover effect */
+        .bouquet-image {
+            height: min(450px, 70vh);
+            max-width: 100%;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+            position: relative;
+            z-index: 10;
+            transition: filter 0.5s ease;
+        }
+
+        .bouquet-image:hover {
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2)) brightness(1.05);
+        }
+
+        /* Redesigned elegant vase */
+        .vase {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(220px, 40vw);
+            height: min(250px, 35vh);
+            border-radius: 45% 45% 8px 8px / 35% 35% 5px 5px;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.15),
+                inset 0 -10px 20px rgba(255,255,255,0.2);
+            background: linear-gradient(175deg, 
+                rgba(160,230,255,0.4), 
+                rgba(87,160,255,0.5), 
+                rgba(107,150,255,0.6));
+            backdrop-filter: blur(5px);
+            transition: all 0.5s ease;
+        }
+
+        .vase:hover {
+            box-shadow: 
+                0 35px 70px rgba(0,0,0,0.2),
+                inset 0 -15px 25px rgba(255,255,255,0.3);
+        }
+
+        .vase-highlight {
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 70%;
+            height: 15%;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            transform: perspective(200px) rotateX(60deg);
+            filter: blur(3px);
+        }
+
+        .vase-water {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            right: 10px;
+            bottom: 0;
+            background: linear-gradient(to bottom, 
+                rgba(190,230,255,0.3), 
+                rgba(150,220,255,0.4));
+            border-radius: 30px 30px 0 0;
+            overflow: hidden;
+        }
+
+        .vase-water::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255,255,255,0.4);
+            animation: water-ripple 6s ease-in-out infinite;
+            border-radius: 50%;
+            transform: scale(1.5, 0.5);
+            filter: blur(2px);
+        }
+
+        @keyframes water-ripple {
+            0%, 100% {
+                transform: scale(1.5, 0.5) translateY(0);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.5, 0.5) translateY(8px);
+                opacity: 0.8;
+            }
+        }
+
+        /* Enhanced glass table with refined reflection */
+        .table {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20vh;
+            background: linear-gradient(to bottom, 
+                rgba(220,240,255,0.4), 
+                rgba(200,220,255,0.7));
+            z-index: 0;
+            box-shadow: 
+                0 -15px 40px rgba(255,255,255,0.3),
+                0 5px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .table::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1), 
+                rgba(255,255,255,0.8), 
+                rgba(255,255,255,0.1));
+        }
+
+        /* Enhanced reflection effect */
+        .reflection {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleY(-0.2) translateY(100%);
+            opacity: 0.4;
+            filter: blur(3px);
+            z-index: 1;
+        }
+
+        .reflection img {
+            height: min(450px, 70vh);
+            max-width: 100%;
+        }
+
+        /* Improved petal animation */
+        .petals {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            perspective: 1000px;
+        }
+
+        .petal {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0;
+            animation: falling linear infinite;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
+            will-change: transform;
+        }
+
+        .petal-white {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Cpath d='M25 5c-10 0-18 10-20 20 2 10 10 20 20 20s18-10 20-20c-2-10-10-20-20-20z' fill='%23ffffff' stroke='%23f5f5f5' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        .petal-pink {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Cpath d='M25 5c-10 0-18 10-20 20 2 10 10 20 20 20s18-10 20-20c-2-10-10-20-20-20z' fill='%23ffccd5' stroke='%23ffb6c1' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        /* Person animation with smooth movements */
+        .person-container {
+            position: absolute;
+            top: 70%;
+            left: -150px;
+            transform: translateY(-50%);
+            z-index: 15;
+            animation: moveAcross 20s linear infinite;
+            opacity: 0.9;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+        }
+
+        .person-image {
+            height: min(500px, 60vh);
+            max-width: 100%;
+            animation: rotate 8s ease-in-out infinite;
+        }
+
+        @keyframes moveAcross {
+            0% {
+                left: -150px;
+                transform: translateY(-50%) translateZ(0);
+            }
+            45%, 55% {
+                transform: translateY(-50%) translateZ(100px);
+            }
+            100% {
+                left: calc(100% + 150px);
+                transform: translateY(-50%) translateZ(0);
+            }
+        }
+
+        @keyframes rotate {
+            0%, 100% {
+                transform: rotate(-3deg);
+            }
+            50% {
+                transform: rotate(3deg);
+            }
+        }
+
+        /* Enhanced petal falling animation */
+        @keyframes falling {
+            0% {
+                transform: translateY(-5%) translateX(0) rotateX(45deg) rotateY(0) rotateZ(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            85% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(105vh) translateX(calc(var(--drift-x) * 1px)) rotateX(180deg) rotateY(180deg) rotateZ(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(calc(var(--float-y) * 1px)) translateX(calc(var(--float-x) * 1px));
+            }
+        }
+
+        /* Enhanced ambient light */
+        .ambient-light {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(1000px, 150vw);
+            height: min(1000px, 150vh);
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.2) 0%,
+                rgba(255, 222, 245, 0.15) 30%,
+                rgba(255, 182, 193, 0.1) 50%,
+                rgba(255, 255, 255, 0) 70%
+            );
+            z-index: 0;
+            filter: blur(50px);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        /* UI elements */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls:hover {
+            opacity: 1;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+            color: var(--text-color);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: white;
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .title {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: min(32px, 6vw);
+            font-weight: 300;
+            color: var(--text-color);
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+            letter-spacing: 2px;
+            z-index: 100;
+            opacity: 0.9;
+            text-align: center;
+            width: 90%;
+        }
+
+        .subtitle {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: min(16px, 4vw);
+            color: var(--text-color);
+            opacity: 0.7;
+            letter-spacing: 1px;
+            z-index: 100;
+            text-align: center;
+            width: 90%;
+        }
+
+        /* Media queries for better responsiveness */
+        @media (max-width: 768px) {
+            .bouquet-image {
+                height: 50vh;
+            }
+            
+            .vase {
+                width: 160px;
+                height: 180px;
+            }
+            
+            .person-container {
+                position: absolute;
+                top: 90%;
+                left: -500px;
+                transform: translateY(-50%);
+                z-index: 15;
+                animation: moveAcross 10s linear infinite;
+                opacity: 0.9;
+                filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+            }
+            
+            .title {
+                top: 20px;
+                font-size: 24px;
+            }
+            
+            .subtitle {
+                top: 60px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bouquet-image {
+                height: 40vh;
+            }
+            
+            .vase {
+                width: 120px;
+                height: 140px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .subtitle {
+                font-size: 12px;
+            }
+            
+            .controls {
+                bottom: 10px;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe4e8 50%, #ffd1dc 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* Zooming slideshow effect */
+        .slideshow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .slideshow-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            max-width: 800px;
+            max-height: 600px;
+        }
+
+        .slideshow-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .slideshow-image.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slideshow-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s ease;
+            z-index: 1001;
+        }
+
+        .slideshow-close:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .zoom-in {
+            animation: zoomIn 0.5s forwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" src="https://firebasestorage.googleapis.com/v0/b/ctuacaccreditedboardinghouse.appspot.com/o/AlayTrabaho%2FTibok%20-%20Earl%20Agustin%20(AshBin%20Version%20Music%20Video).mp3?alt=media&token=33870445-62e6-4922-93ac-707475b0e54e" preload="auto"></audio>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>
+
+    <h1 class="title">Lily of the Valley</h1>
+    <p class="subtitle">flowers for you po miss Quenzhy</p>
+
+    <div class="scene">
+        <div class="ambient-light"></div>
+        <div class="particles" id="particles">
+            <!-- Particles will be added here via JavaScript -->
+        </div>
+        
+        <div class="content-container">
+            <div class="bouquet-container" id="bouquetContainer">
+                <!-- We use a placeholder image here. In a real implementation, replace with your actual lily of the valley image -->
+                <img src="pngtree-bouquet-flowers-of-lilies-of-the-valley-png-image_13323324.png" alt="Lily of the Valley Bouquet" class="bouquet-image" id="bouquetImage">
+                
+                <div class="vase">
+                    <div class="vase-highlight"></div>
+                    <div class="vase-water"></div>
+                </div>
+            </div>
+            
+            <!-- Reflection effect -->
+            <div class="reflection">
+                <img src="c8cb6dad-f7f1-4372-a40a-db6363bbc420-removebg-preview.png" alt="" id="reflectionImage">
+            </div>
+        </div>
+        
+        <div class="table"></div>
+        
+        <!-- Animated person moving -->
+        <div class="person-container">
+            <!-- We use a placeholder image here. In a real implementation, replace with your actual person image -->
+            <img src="c8cb6dad-f7f1-4372-a40a-db6363bbc420-removebg-preview.png" alt="Animated Person" class="person-image">
+        </div>
+        
+        <div class="petals" id="petals">
+            <!-- Petals will be added here via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Image Slideshow Overlay -->
+    <div class="slideshow-overlay" id="slideshowOverlay">
+        <div class="slideshow-close" id="slideshowClose">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="slideshow-container" id="slideshowContainer">
+            <!-- Slideshow images will be added here via JavaScript -->
+        </div>
+    </div>
+
+    <!-- UI Controls -->
+    <div class="controls">
+        <button class="control-btn" id="refreshBtn" title="Refresh Animation">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+        <button class="control-btn" id="shareBtn" title="Share">
+            <i class="fas fa-share-alt"></i>
+        </button>
+        <button class="control-btn" id="infoBtn" title="Information">
+            <i class="fas fa-info"></i>
+        </button>
+    </div>
+
+    <script>
+        // Image slideshow configuration
+        const slideshowImages = [
+            "img/1fbdb168-8f8a-4f80-b67b-ac599e3c8479.jfif",
+            "img/7f745367-0357-42ff-8600-41db888e124d.jfif",
+            "img/9f67df49-712c-495f-a8af-0693bf4a621d.jfif",
+            "img/16cd7f38-9c44-4c3a-8e4d-8af996c5e9ab.jfif",
+            "img/44553e9c-80ef-4182-bca6-e02a433fb249.jfif",
+            "img/426070ad-1210-4199-b7a2-ca88ee575090.jfif",
+            "img/aa2976df-ea41-4e25-9fd3-bdf535d650b9.jfif",
+            "img/d483e547-bbd2-40ef-ad7e-f58743aea118.jfif",
+            "img/dbb72715-040f-482c-bae6-c1ee536dc4e0.jfif",
+            "img/ef6bdf48-a99e-499a-9b40-8175fc92179e.jfif"
+        ];
+        
+        // Wait for all resources to load
+        window.addEventListener('load', function() {
+            // Hide loading overlay
+            setTimeout(function() {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }, 800);
+            }, 1000);
+            
+            // Initialize everything
+            createPetals();
+            createParticles();
+            setupEventListeners();
+            setupSlideshow();
+        });
+
+        // Create slideshow elements
+        function setupSlideshow() {
+            const slideshowContainer = document.getElementById('slideshowContainer');
+            
+            // Create and append image elements for the slideshow
+            slideshowImages.forEach((imgSrc, index) => {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = `Slideshow Image ${index + 1}`;
+                img.className = 'slideshow-image';
+                img.id = `slideshowImage${index}`;
+                slideshowContainer.appendChild(img);
+            });
+            
+            // Add click event to bouquet image
+            document.getElementById('bouquetImage').addEventListener('click', startSlideshow);
+            
+            // Add close event
+            document.getElementById('slideshowClose').addEventListener('click', closeSlideshow);
+        }
+        
+        // Start the slideshow
+        function startSlideshow() {
+            // Show the overlay
+            const overlay = document.getElementById('slideshowOverlay');
+            overlay.classList.add('slideshow-active');
+            
+            let currentImageIndex = 0;
+            const totalImages = slideshowImages.length;
+            
+            // Function to display next image
+            function showNextImage() {
+                // Hide all images
+                document.querySelectorAll('.slideshow-image').forEach(img => {
+                    img.classList.remove('active');
+                    img.classList.remove('zoom-in');
+                });
+                
+                // Show and animate current image
+                const currentImage = document.getElementById(`slideshowImage${currentImageIndex}`);
+                currentImage.classList.add('active');
+                currentImage.classList.add('zoom-in');
+                
+                currentImageIndex++;
+                
+                // Continue slideshow if there are more images
+                if (currentImageIndex < totalImages) {
+                    setTimeout(showNextImage, 400); 
+                } else {
+                    // End of slideshow, close after a short delay
+                    setTimeout(closeSlideshow, 1000);
+                }
+            }
+            
+            // Start the slideshow
+            showNextImage();
+        }
+        
+        // Close the slideshow
+        function closeSlideshow() {
+            const overlay = document.getElementById('slideshowOverlay');
+            overlay.classList.remove('slideshow-active');
+            
+            // Reset all images
+            document.querySelectorAll('.slideshow-image').forEach(img => {
+                img.classList.remove('active');
+                img.classList.remove('zoom-in');
+            });
+        }
+
+        // Create background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const totalParticles = 30;
+            
+            for (let i = 0; i < totalParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                particle.style.left = `${left}%`;
+                particle.style.top = `${top}%`;
+                
+                // Random size between 5px and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random animation properties
+                const duration = Math.random() * 10 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random movement distance
+                const floatX = Math.random() * 40 - 20; // -20 to 20
+                const floatY = Math.random() * 40 - 20; // -20 to 20
+                particle.style.setProperty('--float-x', floatX);
+                particle.style.setProperty('--float-y', floatY);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create enhanced falling petals
+        function createPetals() {
+            const petalsContainer = document.getElementById('petals');
+            petalsContainer.innerHTML = ''; // Clear existing petals
+            const totalPetals = 50;
+
+            for (let i = 0; i < totalPetals; i++) {
+                const petal = document.createElement('div');
+                
+                // Randomly choose between white and pink petals
+                const isWhite = Math.random() > 0.2; // 80% white, 20% pink
+                petal.classList.add('petal', isWhite ? 'petal-white' : 'petal-pink');
+                
+                // Random position
+                const left = Math.random() * 100;
+                petal.style.left = `${left}%`;
+                
+                // Random size between 8px and 20px
+                const size = Math.random() * 12 + 8;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                
+                // Random animation duration between 10s and 25s
+                const duration = Math.random() * 15 + 10;
+                petal.style.animationDuration = `${duration}s`;
+                
+                // Random delay up to 25s for continuous effect
+                const delay = Math.random() * 25;
+                petal.style.animationDelay = `${delay}s`;
+                
+                // Random drift amount
+                const driftX = Math.random() * 200 - 100; // -100 to 100
+                petal.style.setProperty('--drift-x', driftX);
+                
+                petalsContainer.appendChild(petal);
+            }
+        }
+        
+        // Set up event listeners for interactive elements
+        function setupEventListeners() {
+            // Bouquet interaction - subtle zoom on hover already handled in CSS
+            const bouquetContainer = document.getElementById('bouquetContainer');
+            const bouquetImage = document.getElementById('bouquetImage');
+            const reflectionImage = document.getElementById('reflectionImage');
+            
+            // Make sure the reflection image matches the bouquet image if not already set in HTML
+            if (!reflectionImage.src || reflectionImage.src.includes('placeholder')) {
+                reflectionImage.src = bouquetImage.src;
+            }
+            
+            // UI Button interactions
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                // Refresh petals animation
+                createPetals();
+                // Visual feedback
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 300);
+            });
+            
+            document.getElementById('shareBtn').addEventListener('click', function() {
+                alert('Share this beautiful bouquet with friends!');
+            });
+            
+            document.getElementById('infoBtn').addEventListener('click', function() {
+                alert('Lily of the Valley: These delicate white bell-shaped flowers symbolize sweetness, humility, and the return of happiness.');
+            });
+        }
+
+         // Wait for user interaction to comply with autoplay policies
+    window.addEventListener('click', function playMusicOnce() {
+      const music = document.getElementById('bg-music');
+      music.play().catch((e) => {
+        console.log("Autoplay failed:", e);
+      });
+      window.removeEventListener('click', playMusicOnce); // Only play once
+    });
+    </script>
+</body>
+</html>
